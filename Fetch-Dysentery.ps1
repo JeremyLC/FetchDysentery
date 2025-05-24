@@ -1,3 +1,31 @@
+﻿    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Username = $("{0}@{1}" -f $Env:USERNAME, $Env:USERDOMAIN),
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Date = (Get-Date -Format "MMM dd, yyyy"),
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Weather,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Battery = ((Get-WmiObject Win32_Battery).EstimatedChargeRemaining),
+        [Parameter(Mandatory = $false)]
+        [string]
+        $RAM = ([Math]::Round((Get-WmiObject -Class win32_computersystem).TotalPhysicalMemory / 1GB)),
+        [Parameter(Mandatory = $false)]
+        [string]
+        $CPUCores = ((Get-WmiObject Win32_Processor).NumberOfCores),
+        [Parameter(Mandatory = $false)]
+        [string]
+        $DiskCUsed,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $DiskCFree
+    )
+
 function Format-Wrapped {
     param(
         # Text
@@ -54,35 +82,6 @@ function Box-Text {
     }
 }
 
-
-function Fetch-Dysentery {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Username = $("{0}@{1}" -f $Env:USERNAME, $Env:USERDOMAIN),
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Date = (Get-Date -Format "MMM dd, yyyy"),
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Weather,
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Battery = ((Get-WmiObject Win32_Battery).EstimatedChargeRemaining),
-        [Parameter(Mandatory = $false)]
-        [string]
-        $RAM = ([Math]::Round((Get-WmiObject -Class win32_computersystem).TotalPhysicalMemory / 1GB)),
-        [Parameter(Mandatory = $false)]
-        [string]
-        $CPUCores = ((Get-WmiObject Win32_Processor).NumberOfCores),
-        [Parameter(Mandatory = $false)]
-        [string]
-        $DiskCUsed,
-        [Parameter(Mandatory = $false)]
-        [string]
-        $DiskCFree
-    )
     $Wagon = [PSCustomObject]@{
         Image   = @'
 [?25l[0m            [38;2;0;0;0m▁[48;2;3;3;3m▔[38;2;193;193;193;48;2;7;7;7m▂[38;2;20;20;20;48;2;241;241;241m▀[38;2;240;240;240;48;2;32;32;32m▆[38;2;20;20;20;48;2;239;239;239m▔[0m[38;2;254;254;254m█[38;2;236;236;236;48;2;254;254;254m▁[38;2;204;204;204;48;2;253;253;253m▕[38;2;3;3;3;48;2;237;237;237m▔[38;2;245;245;245;48;2;137;137;137m▆[38;2;155;155;155;48;2;226;226;226m▘[38;2;145;145;145;48;2;198;198;198m▕[38;2;141;141;141;48;2;213;213;213m▁[38;2;212;212;212;48;2;135;135;135m▆[38;2;141;141;141;48;2;220;220;220m▝[38;2;135;135;135;48;2;171;171;171m▗[38;2;240;240;240;48;2;160;160;160m▀[38;2;86;86;86;48;2;231;231;231m▔[38;2;151;151;151;48;2;215;215;215m▝[38;2;170;170;170;48;2;207;207;207m▕[38;2;154;154;154;48;2;220;220;220m▁[38;2;172;172;172;48;2;242;242;242m▂[38;2;232;232;232;48;2;59;59;59m▆[38;2;195;195;195;48;2;13;13;13m▃[0m[7m[38;2;3;3;3m▔[0m  [0m
@@ -151,4 +150,3 @@ $($Box.Text -Join [System.Environment]::NewLine)
             Write-Host $("{0}" -f $Wagon.Image[$ImageRow])
         }
     }
-}
